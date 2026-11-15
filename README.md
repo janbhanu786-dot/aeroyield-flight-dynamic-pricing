@@ -6,24 +6,64 @@ A full-stack airline revenue management, seat reservation, and dynamic pricing s
 
 ## Project Walkthrough & Visual Previews
 
-### 1. Flight Booking & Interactive Cabin Seat Map
-Passengers search live routes (`DEL → BOM`, `HYD → BLR`, `BOM → DXB`, `BLR → SIN`, `DEL → LHR`, `MAA → DEL`), inspect real-time dynamic fare multipliers, and select seats on an interactive 20×6 cabin map with Window (+6%) and Exit Row (+12%) surcharges. Confirming or cancelling a PNR immediately updates flight load factor and triggers live repricing across remaining seats.
+### Flight Booking & Reservation Engine
 
-![Flight Booking & Interactive Seat Map](docs/screenshots/01_flight_booking_seat_map.jpg)
+#### 1. Live Flight Schedule & Dynamic Fare Quotes
+Search and filter across domestic and international routes (`DEL → BOM`, `HYD → BLR`, `BOM → DXB`, `BLR → SIN`, `DEL → LHR`, `MAA → DEL`) with real-time dynamic multipliers, cabin class switching (`Economy`, `Premium Economy`, `Business`), and EMSR-b active bucket indicators.
+
+![Live Flight Schedule & Dynamic Fares](docs/screenshots/01_flight_routes_and_fares.jpg.png)
+
+#### 2. Interactive 20×6 Cabin Seat Map & Checkout
+Select available seats directly on the cabin layout with automatic ancillary surcharges for Exit Rows (+12%), Window seats (+6%), and Aisle seats (+2%), displaying a transparent fare breakdown prior to booking.
+
+![Interactive Cabin Seat Map & Checkout](docs/screenshots/02_cabin_seat_map_checkout.jpg.png)
+
+#### 3. PNR Confirmation, Cancellation & Market Simulator
+Confirming a reservation issues a unique PNR and immediately reprices remaining seats as load factor increases. Cancelling a PNR releases seats back to inventory, while live sliders simulate Days to Departure, Booking Velocity, and Seasonality regimes.
+
+![PNR Ledger & Market Simulator](docs/screenshots/03_pnr_ledger_market_sim.jpg.png)
 
 ---
 
-### 2. EMSR-b Dynamic Pricing & Elasticity Laboratory
-Explore how fares evolve across a 90-day booking window under Low, Nominal, and Surge demand. The engine computes **Belobaba's EMSR-b** protection levels ($\theta_j$) and booking limits across 5 nested fare buckets (`Y`, `B`, `M`, `Q`, `L`), alongside an iso-elastic demand and revenue optimization curve ($P^*$).
+### Dynamic Pricing & EMSR-b Optimization
 
-![Dynamic Pricing Lab & EMSR-b Buckets](docs/screenshots/02_dynamic_pricing_lab.jpg)
+#### 4. 90-Day Fare Trajectory & Pricing Multipliers
+Tracks dynamic pricing curves across Low (25%), Current, and Surge (90%) cabin load regimes alongside real-time urgency, scarcity, velocity, and competitor index KPIs.
+
+![90-Day Fare Trajectory & Pricing Multipliers](docs/screenshots/04_dynamic_pricing_trajectory.jpg.png)
+
+#### 5. EMSR-b Nested Fare Buckets & Price Elasticity Curve
+Calculates Belobaba's EMSR-b protection levels ($\theta_j$) and booking limits across nested buckets (`Y`, `B`, `M`, `Q`, `L`), paired with the iso-elastic revenue optimization curve $Q(P) = Q_0 \cdot (P/P_0)^{-\epsilon}$.
+
+![EMSR-b Nested Fare Buckets & Elasticity Curve](docs/screenshots/05_emsr_b_bucket_allocation.jpg.png)
 
 ---
 
-### 3. Non-Homogeneous Poisson Monte Carlo Revenue Benchmark
-Simulates passenger arrivals via a **Non-Homogeneous Poisson Process (NHPP)** with log-normal willingness-to-pay over a multi-week horizon, comparing **Static Fixed Pricing** against **Dynamic EMSR-b Pricing** to quantify net Yield Lift (%), cabin load factor, and unsold seat spoilage.
+### ML Demand Forecasting (`scikit-learn`)
 
-![Monte Carlo Yield Lift Comparison](docs/screenshots/03_monte_carlo_yield_lift.jpg)
+#### 6. Ensemble Model Accuracy & Demand Prediction
+Benchmarks `RandomForestRegressor` and `GradientBoostingRegressor` models on synthetic flight booking telemetry using `R²`, `RMSE`, and `MAE`, with interactive seat-demand inference.
+
+![ML Model Benchmark & Demand Prediction](docs/screenshots/06_ml_model_metrics_accuracy.jpg.png)
+
+#### 7. Feature Importance & Willingness-to-Pay Drivers
+Visualizes normalized feature importances across Days to Departure, Load Factor, Seasonality, and Historical Booking Velocity to explain fare predictions transparently.
+
+![ML Feature Importance & Drivers](docs/screenshots/07_ml_feature_importance_curve.jpg.png)
+
+---
+
+### Non-Homogeneous Poisson Monte Carlo Simulator
+
+#### 8. Static vs. Dynamic Cumulative Revenue Curve
+Simulates stochastic passenger arrivals via a Non-Homogeneous Poisson Process (NHPP) and compares cumulative Static Fixed Pricing revenue against Dynamic EMSR-b Pricing to quantify net Yield Lift (%).
+
+![Monte Carlo Cumulative Revenue Curve](docs/screenshots/08_monte_carlo_revenue_curve.jpg.png)
+
+#### 9. Spoilage Reduction, Event Log & CSV Export
+Displays final cabin utilization, rejected high-WTP vs. low-WTP arrival outcomes, tick-by-tick booking telemetry, and downloadable simulation CSV reports.
+
+![Monte Carlo Event Log & Yield Metrics](docs/screenshots/09_monte_carlo_event_log.jpg.png)
 
 ---
 
@@ -121,9 +161,15 @@ aeroyield-flight-dynamic-pricing/
 └── docs/
     ├── ARCHITECTURE_AND_ALGORITHMS.md  # Mathematical specs & API reference
     └── screenshots/                    # UI explanation screenshots for GitHub
-        ├── 01_flight_booking_seat_map.jpg
-        ├── 02_dynamic_pricing_lab.jpg
-        └── 03_monte_carlo_yield_lift.jpg
+        ├── 01_flight_routes_and_fares.jpg.png
+        ├── 02_cabin_seat_map_checkout.jpg.png
+        ├── 03_pnr_ledger_market_sim.jpg.png
+        ├── 04_dynamic_pricing_trajectory.jpg.png
+        ├── 05_emsr_b_bucket_allocation.jpg.png
+        ├── 06_ml_model_metrics_accuracy.jpg.png
+        ├── 07_ml_feature_importance_curve.jpg.png
+        ├── 08_monte_carlo_revenue_curve.jpg.png
+        └── 09_monte_carlo_event_log.jpg.png
 ```
 
 ---
